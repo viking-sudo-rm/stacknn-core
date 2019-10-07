@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import List
 
 import torch
 import torch.nn as nn
@@ -43,9 +42,6 @@ class Struct(nn.Module):
         self.batch_size = batch_size
         self.embedding_size = embedding_size
 
-        self.contents: List[torch.Tensor] = []
-        self.strengths: List[torch.Tensor] = []
-
     def forward(self,
                 values: torch.FloatTensor,
                 pop_strengths: torch.FloatTensor,
@@ -61,7 +57,7 @@ class Struct(nn.Module):
         self.push(values, push_strengths)
 
         if read_strengths is None:
-            read_strengths = 1
+            read_strengths = torch.ones_like(pop_strengths)
 
         return self.read(read_strengths)
 

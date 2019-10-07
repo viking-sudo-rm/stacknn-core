@@ -55,11 +55,6 @@ def bottom(num_steps):
     return 0
 
 
-class Operation(object):
-    push = 0
-    pop = 1
-
-
 class SimpleStruct(Struct):
     """
     Abstract class that subsumes the stack and the queue. This class is
@@ -79,9 +74,8 @@ class SimpleStruct(Struct):
     position in which pushed items are inserted. See Stack and Queue
     below for examples.
     """
-    __metaclass__ = ABCMeta
 
-    def __init__(self, batch_size, embedding_size, device=None):
+    def __init__(self, batch_size, embedding_size):
         """
         Constructor for the SimpleStruct object.
 
@@ -92,35 +86,11 @@ class SimpleStruct(Struct):
         :param embedding_size: The size of the vectors stored in this
             SimpleStruct
         """
-        super(SimpleStruct, self).__init__(batch_size, embedding_size)
-        operations = [Operation.push, Operation.pop]
-        self._reg_trackers = [None for _ in operations]
+        super().__init__(batch_size, embedding_size)
 
         # Vector contents on the stack and their corresponding strengths.
-        self._values = []
-        self._strengths = []
-
-        # Whether the stack should be computed on the CPU or GPU.
-        self._device = device
-
-    def init_contents(self, xs):
-        """
-        Initialize the SimpleStruct's contents to a specified collection
-        of values. Each value will have a strength of 1.
-
-        :type xs: Variable
-        :param xs: An array of values that will be placed on the
-            SimpleStruct. The dimensions should be [t, batch size,
-            read size], where t is the number of values that will be
-            placed on the SimpleStruct
-
-        :return: None
-        """
-        length = xs.size(0)
-        self._values = torch.unbind(xs)
-        self._strengths = [Variable(torch.ones(self.batch_size,
-                                               device=self._device))
-                           for _ in length]
+        self._values: List[torch.Tensor] = []
+        self._strengths: List[torch.Tensor] = []
 
     def __len__(self):
         return len(self._values)
@@ -166,6 +136,8 @@ class SimpleStruct(Struct):
         """
         raise NotImplementedError("Missing implementation for _read_indices")
 
+    """Implement the abstract operations inherited from base Struct."""
+
     def pop(self, strength):
         """
         Popping is done by decreasing the strength of items in the
@@ -184,7 +156,6 @@ class SimpleStruct(Struct):
 
         :return: None
         """
-        self._track_reg(strength, Operation.pop)
         for i in self._pop_indices():
             local_strength = relu(self._strengths[i] - strength)
             strength = relu(strength - self._strengths[i])
@@ -211,8 +182,6 @@ class SimpleStruct(Struct):
 
         :return: None
         """
-        self._track_reg(strength, Operation.push)
-
         push_index = self._push_index()
         self._values.insert(push_index, value)
         self._strengths.insert(push_index, strength)
@@ -235,10 +204,8 @@ class SimpleStruct(Struct):
         :rtype: Variable
         :return: The output of the read operation, described above
         """
-        summary = Variable(torch.zeros([self.batch_size, self.embedding_size],
-                                       device=self._device))
-        strength_used = Variable(torch.zeros(self.batch_size,
-                                             device=self._device))
+        summary = 0.
+        strength_used = 0.
 
         for i in self._read_indices():
             strength_weight = torch.min(self._strengths[i],
@@ -252,35 +219,6 @@ class SimpleStruct(Struct):
                 break
 
         return summary
-
-    def set_reg_tracker(self, reg_tracker, operation):
-        """
-        Regularize an operation on this struct.
-
-        :type reg_tracker: regularization.InterfaceRegTracker
-        :param reg_tracker: Tracker that should be used to regularize.
-
-        :type operation: Operation
-        :param operation: Enum specifying which operation should be
-        regularized.
-
-        """
-        self._reg_trackers[operation] = reg_tracker
-
-    def _track_reg(self, strength, operation):
-        """
-        Private method to track regularization on interface calls.
-
-        :type strength: Variable
-        :param strength: Strength vector given to pop/push call.
-
-        :type operation: Operation
-        :param operation: Operation type specified by enum.
-
-        """
-        reg_tracker = self._reg_trackers[operation]
-        if reg_tracker is not None:
-            reg_tracker.regularize(strength)
 
     """ Reporting """
 
