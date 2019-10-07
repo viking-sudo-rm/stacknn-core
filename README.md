@@ -1,4 +1,4 @@
-# StackNN
+# `stacknn-core`: The Successor to StackNN
 This implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and integrate with any framework. For example, to construct a differentiable stack and perform a push, all you have to do is:
 
 ```python
