@@ -1,5 +1,5 @@
 # `stacknn-core`: The Successor to StackNN
-This implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and integrate with any framework. For example, to construct a differentiable stack and perform a push, all you have to do is:
+This library implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and integrate with any framework. For example, to construct a differentiable stack and perform a push, all you have to do is:
 
 ```python
 from stacknn.structs import Stack
@@ -7,7 +7,7 @@ stack = Stack(BATCH_SIZE, STACK_VECTOR_SIZE)
 read_vectors = stack(value_vectors, pop_strengths, push_strengths)
 ```
 
-For some more complex examples, refer to the [StackNN](https://github.com/viking-sudo-rm/StackNN) or [industrial-stacknns](https://github.com/viking-sudo-rm/industrial-stacknns) repositories.
+For more complex use cases, refer to the (old) [StackNN](https://github.com/viking-sudo-rm/StackNN) or [industrial-stacknns](https://github.com/viking-sudo-rm/industrial-stacknns) repositories.
 
 All the code in this repository is associated with the paper [Context-Free Transductions with Neural Stacks](https://arxiv.org/abs/1809.02836), which appeared at the Analyzing and Interpreting Neural Networks for NLP workshop at EMNLP 2018. Refer to our paper for more theoretical background on differentiable data structures.
 

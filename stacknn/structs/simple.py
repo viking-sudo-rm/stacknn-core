@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 from abc import ABCMeta, abstractmethod
-from six.moves import range
 
 import torch
 from torch.autograd import Variable
