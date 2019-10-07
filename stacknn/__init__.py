@@ -1,3 +1,2 @@
-import stacknn.utils
-import stacknn.structs
-import stacknn.test
+from .utils import *
+from .structs import *
