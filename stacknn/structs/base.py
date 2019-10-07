@@ -1,8 +1,8 @@
 from abc import ABCMeta, abstractmethod
+from typing import List
 
 import torch
 import torch.nn as nn
-from torch.autograd import Variable
 
 
 class Struct(nn.Module):
@@ -42,46 +42,28 @@ class Struct(nn.Module):
         super(Struct, self).__init__()
         self.batch_size = batch_size
         self.embedding_size = embedding_size
-        self._zeros = Variable(torch.zeros(batch_size))
 
-        self.contents = Variable(torch.FloatTensor(0))
-        self.strengths = Variable(torch.FloatTensor(0))
+        self.contents: List[torch.Tensor] = []
+        self.strengths: List[torch.Tensor] = []
 
-        return
-
-    def forward(self, v, u, d, r=None):
+    def forward(self,
+                values: torch.FloatTensor,
+                pop_strengths: torch.FloatTensor,
+                push_strengths: torch.FloatTensor,
+                read_strengths: torch.FloatTensor = None):
         """
         Performs the following three operations:
             - Pop something from the data structure
             - Push something onto the data structure
             - Read an element of the data structure.
-
-        :type v: torch.FloatTensor
-        :param v: The value that will be pushed to the data structure
-
-        :type u: float
-        :param u: The total strength of values that will be popped from
-            the data structure
-
-        :type d: float
-        :param d: The strength with which v will be pushed to the data
-            structure
-
-        :rtype: torch.FloatTensor
-        :return: The value read from the data structure
         """
-        self.pop(u)
-        self.push(v, d)
+        self.pop(pop_strengths)
+        self.push(values, push_strengths)
 
-        if r is not None:
-            read_strength = r
-        elif self._read_strength is not None:
-            # TODO: Should deprecate this option.
-            read_strength = self._read_strength
-        else:
-            read_strength = 1
+        if read_strengths is None:
+            read_strengths = 1
 
-        return self.read(read_strength)
+        return self.read(read_strengths)
 
     @abstractmethod
     def pop(self, strength):
@@ -130,7 +112,3 @@ class Struct(nn.Module):
             be combined into a single tensor
         """
         raise NotImplementedError("Missing implementation for read")
-
-    @property
-    def read_strength(self):
-        return 1.

@@ -21,4 +21,5 @@ class NullStruct(Struct):
         pass
 
     def read(self, strength):
-        return Variable(torch.zeros([self.batch_size, self.embedding_size]))
+        return Variable(torch.zeros([self.batch_size, self.embedding_size],
+                        device=strength.device))

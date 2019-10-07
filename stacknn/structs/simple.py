@@ -81,7 +81,7 @@ class SimpleStruct(Struct):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, batch_size, embedding_size, k=None, device=None):
+    def __init__(self, batch_size, embedding_size, device=None):
         """
         Constructor for the SimpleStruct object.
 
@@ -95,7 +95,6 @@ class SimpleStruct(Struct):
         super(SimpleStruct, self).__init__(batch_size, embedding_size)
         operations = [Operation.push, Operation.pop]
         self._reg_trackers = [None for _ in operations]
-        self._read_strength = k
 
         # Vector contents on the stack and their corresponding strengths.
         self._values = []
@@ -166,10 +165,6 @@ class SimpleStruct(Struct):
             the order of the reading cascade
         """
         raise NotImplementedError("Missing implementation for _read_indices")
-
-    @property
-    def read_strength(self):
-        return self._read_strength
 
     def pop(self, strength):
         """
