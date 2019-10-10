@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
-from abc import ABCMeta, abstractmethod
+from typing import List
+from abc import abstractmethod
 
 import torch
 from torch.autograd import Variable
@@ -156,13 +157,29 @@ class SimpleStruct(Struct):
 
         :return: None
         """
+        pop_queue = []
         for i in self._pop_indices():
             local_strength = relu(self._strengths[i] - strength)
             strength = relu(strength - self._strengths[i])
             self._strengths[i] = local_strength
-            # TODO: Should we remove values if they are all zero?
-            if all(strength == 0):
+
+            # When we use up all our pop strength, stop.
+            if (strength == 0).all():
                 break
+
+            # If this item is zero-ed, skip it and remove it.
+            if (self._strengths[i] == 0).all():
+                # TODO: We would keep different lists for each batch element.
+                pop_queue.append(i)
+                continue
+
+        # Remove elements that are all zero.
+        offset = 0
+        while pop_queue:
+            idx = pop_queue.pop(0) - offset
+            self._values.pop(idx)
+            self._strengths.pop(idx)
+            offset += 1
 
     def push(self, value, strength):
         """
@@ -215,7 +232,7 @@ class SimpleStruct(Struct):
 
             summary += strength_weight * self._values[i]
             strength_used = strength_used + self._strengths[i]
-            if all(strength_used == strength):
+            if (strength_used == strength).all():
                 break
 
         return summary

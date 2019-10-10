@@ -78,6 +78,25 @@ class TestStructs(unittest.TestCase):
         )
         assert_approx_equal(read_vector.data[0,0], 3.)
 
+    def test_zero_items_removed(self):
+        stack = Stack(1, 1)
+
+        stack(
+            Variable(torch.FloatTensor([[1]])),
+            Variable(torch.FloatTensor([[0]])),
+            Variable(torch.FloatTensor([[.5]])),
+            Variable(torch.FloatTensor([[0]])),
+        )
+
+        stack(
+            Variable(torch.FloatTensor([[1]])),
+            Variable(torch.FloatTensor([[1]])),
+            Variable(torch.FloatTensor([[1]])),
+            Variable(torch.FloatTensor([[0]])),
+        )
+
+        assert(len(stack) == 1)
+
 
 if __name__ == "__main__":
     unittest.main()
