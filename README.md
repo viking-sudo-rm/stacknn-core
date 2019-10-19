@@ -19,6 +19,10 @@ pip install git+https://github.com/viking-sudo-rm/stacknn-core
 
 Depends on numpy and torch.
 
+## Acknowledgements
+
+Thanks to the various members of [Computational Linguistics at Yale](http://clay.yale.edu/) who contributed to the various iterations of this library. All the contributors are listed on the Contributors page.
+
 ## Contributing
 
 This project is managed by [Computational Linguistics at Yale](http://clay.yale.edu/). We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker. If you are a Yale student interested in joining our lab, please contact Bob Frank.
