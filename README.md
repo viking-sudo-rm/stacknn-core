@@ -53,3 +53,10 @@ If you use this codebase in your research, please cite the associated paper:
     abstract = "This paper analyzes the behavior of stack-augmented recurrent neural network (RNN) models. Due to the architectural similarity between stack RNNs and pushdown transducers, we train stack RNN models on a number of tasks, including string reversal, context-free language modelling, and cumulative XOR evaluation. Examining the behavior of our networks, we show that stack-augmented RNNs can discover intuitive stack-based strategies for solving our tasks. However, stack RNNs are more difficult to train than classical architectures such as LSTMs. Rather than employ stack-based strategies, more complex stack-augmented networks often find approximate solutions by using the stack as unstructured memory.",
 }
 ```
+
+## Running Tests
+
+To run the unit tests for this library, execute the follow command from the root stacknn-core directory:
+```shell
+python -m unittest
+```
