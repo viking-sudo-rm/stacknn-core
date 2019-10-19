@@ -18,21 +18,21 @@ class TestStructs(unittest.TestCase):
             Variable(torch.FloatTensor([[.8]])),
         )
         # stack.log()
-        assert_approx_equal(out.data[0,0], .8)
+        assert_approx_equal(out.item(), .8)
         out = stack(
             Variable(torch.FloatTensor([[2]])),
             Variable(torch.FloatTensor([[.1]])),
             Variable(torch.FloatTensor([[.5]])),
         )
         # stack.log()
-        assert_approx_equal(out.data[0,0], 1.5)
+        assert_approx_equal(out.item(), 1.5)
         out = stack(
             Variable(torch.FloatTensor([[3]])),
             Variable(torch.FloatTensor([[.9]])),
             Variable(torch.FloatTensor([[.9]])),
         )
         # stack.log()
-        assert_approx_equal(out.data[0,0], 2.8)
+        assert_approx_equal(out.item(), 2.8)
 
     def test_queue(self):
         """Adapts example from Grefenstette paper for queues."""
@@ -43,21 +43,21 @@ class TestStructs(unittest.TestCase):
             Variable(torch.FloatTensor([[.8]])),
         )
         # queue.log()
-        assert_approx_equal(out.data[0,0], .8)
+        assert_approx_equal(out.item(), .8)
         out = queue(
             Variable(torch.FloatTensor([[2]])),
             Variable(torch.FloatTensor([[.1]])),
             Variable(torch.FloatTensor([[.5]])),
         )
         # queue.log()
-        assert_approx_equal(out.data[0,0], 1.3)
+        assert_approx_equal(out.item(), 1.3)
         out = queue(
             Variable(torch.FloatTensor([[3]])),
             Variable(torch.FloatTensor([[.9]])),
             Variable(torch.FloatTensor([[.9]])),
         )
         # queue.log()
-        assert_approx_equal(out.data[0,0], 2.7)
+        assert_approx_equal(out.item(), 2.7)
 
     def test_read_geq_1_stack(self):
         stack = Stack(1, 1)
@@ -76,23 +76,23 @@ class TestStructs(unittest.TestCase):
             Variable(torch.FloatTensor([[0]])),
             Variable(torch.FloatTensor([[3.]])),
         )
-        assert_approx_equal(read_vector.data[0,0], 3.)
+        assert_approx_equal(read_vector.item(), 3.)
 
     def test_zero_items_removed(self):
+        # TODO: Because of some numerical precision, stuff, some values don't
+        # get removed (uncovered).
         stack = Stack(1, 1)
 
         stack(
             Variable(torch.FloatTensor([[1]])),
             Variable(torch.FloatTensor([[0]])),
             Variable(torch.FloatTensor([[.5]])),
-            Variable(torch.FloatTensor([[0]])),
         )
 
         stack(
             Variable(torch.FloatTensor([[1]])),
             Variable(torch.FloatTensor([[1]])),
             Variable(torch.FloatTensor([[1]])),
-            Variable(torch.FloatTensor([[0]])),
         )
 
         assert(len(stack) == 1)

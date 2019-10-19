@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from typing import List
-from abc import abstractmethod
+from abc import abstractmethod, abstractproperty
 
 import torch
 from torch.autograd import Variable
@@ -137,6 +137,11 @@ class SimpleStruct(Struct):
         """
         raise NotImplementedError("Missing implementation for _read_indices")
 
+    @abstractmethod
+    def _increasing_indices(self) -> bool:
+        """Are the indices returned by the indices methods increasing?"""
+        return NotImplemented
+
     """Implement the abstract operations inherited from base Struct."""
 
     def pop(self, strength):
@@ -157,7 +162,9 @@ class SimpleStruct(Struct):
 
         :return: None
         """
-        pop_queue = []
+        zeros = torch.zeros_like(strength)
+        decreasing_remove_idxs = []
+
         for i in self._pop_indices():
             local_strength = relu(self._strengths[i] - strength)
             strength = relu(strength - self._strengths[i])
@@ -168,18 +175,17 @@ class SimpleStruct(Struct):
                 break
 
             # If this item is zero-ed, skip it and remove it.
-            if (self._strengths[i] == 0).all():
+            if torch.allclose(self._strengths[i], zeros):
                 # TODO: We would keep different lists for each batch element.
-                pop_queue.append(i)
-                continue
+                if self._increasing_indices():
+                    decreasing_remove_idxs.insert(0, i)
+                else:
+                    decreasing_remove_idxs.append(i)
 
-        # Remove elements that are all zero.
-        offset = 0
-        while pop_queue:
-            idx = pop_queue.pop(0) - offset
+        # Remove indices that are zero, starting at the end.
+        for idx in decreasing_remove_idxs:
             self._values.pop(idx)
             self._strengths.pop(idx)
-            offset += 1
 
     def push(self, value, strength):
         """
@@ -287,6 +293,9 @@ class Stack(SimpleStruct):
     def _read_indices(self):
         return top_to_bottom(len(self))
 
+    def _increasing_indices(self):
+        return False
+
 
 class Queue(SimpleStruct):
     """
@@ -302,3 +311,6 @@ class Queue(SimpleStruct):
 
     def _read_indices(self):
         return bottom_to_top(len(self))
+
+    def _increasing_indices(self):
+        return True
