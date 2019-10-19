@@ -54,7 +54,7 @@ If you use this codebase in your research, please cite the associated paper:
 }
 ```
 
-## Running Tests
+## Unit Tests
 
 To run the unit tests for this library, execute the follow command from the root stacknn-core directory:
 ```shell
