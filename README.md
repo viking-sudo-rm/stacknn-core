@@ -1,5 +1,5 @@
 # `stacknn-core`: The Successor to StackNN
-This library implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and integrate with any framework. For example, to construct a differentiable stack and perform a push, all you have to do is:
+This library implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and optimized for faster training. The API is also straightforward. For example, to construct a differentiable stack and perform a push, all you have to do is:
 
 ```python
 from stacknn.structs import Stack
@@ -19,9 +19,15 @@ pip install git+https://github.com/viking-sudo-rm/stacknn-core
 
 Depends on numpy and torch.
 
+## Acknowledgements
+
+Thanks to the various members of [Computational Linguistics at Yale](http://clay.yale.edu/) who contributed to the various iterations of this library. All the contributors are listed on the Contributors page.
+
 ## Contributing
 
-This project is managed by [Computational Linguistics at Yale](http://clay.yale.edu/). We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker. If you are a Yale student interested in joining our lab, please contact Bob Frank.
+This project is managed by [Computational Linguistics at Yale](http://clay.yale.edu/). We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker.
+
+If you are a Yale student interested in joining our lab for this or another project, please contact Bob Frank.
 
 ## Citations
 
@@ -46,4 +52,11 @@ If you use this codebase in your research, please cite the associated paper:
     pages = "306--315",
     abstract = "This paper analyzes the behavior of stack-augmented recurrent neural network (RNN) models. Due to the architectural similarity between stack RNNs and pushdown transducers, we train stack RNN models on a number of tasks, including string reversal, context-free language modelling, and cumulative XOR evaluation. Examining the behavior of our networks, we show that stack-augmented RNNs can discover intuitive stack-based strategies for solving our tasks. However, stack RNNs are more difficult to train than classical architectures such as LSTMs. Rather than employ stack-based strategies, more complex stack-augmented networks often find approximate solutions by using the stack as unstructured memory.",
 }
+```
+
+## Unit Tests
+
+To run the unit tests for this library, execute the follow command from the root stacknn-core directory:
+```shell
+python -m unittest
 ```
