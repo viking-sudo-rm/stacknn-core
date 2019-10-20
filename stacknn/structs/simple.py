@@ -76,7 +76,7 @@ class SimpleStruct(Struct):
     below for examples.
     """
 
-    def __init__(self, batch_size, embedding_size):
+    def __init__(self, batch_size, embedding_size, remove_zeros=True):
         """
         Constructor for the SimpleStruct object.
 
@@ -88,6 +88,7 @@ class SimpleStruct(Struct):
             SimpleStruct
         """
         super().__init__(batch_size, embedding_size)
+        self.remove_zeros = remove_zeros
 
         # Vector contents on the stack and their corresponding strengths.
         self._values: List[torch.Tensor] = []
@@ -175,7 +176,7 @@ class SimpleStruct(Struct):
                 break
 
             # If this item is zero-ed, skip it and remove it.
-            if torch.allclose(self._strengths[i], zeros):
+            if self.remove_zeros and torch.allclose(self._strengths[i], zeros):
                 # TODO: We would keep different lists for each batch element.
                 if self._increasing_indices():
                     decreasing_remove_idxs.insert(0, i)
@@ -183,9 +184,10 @@ class SimpleStruct(Struct):
                     decreasing_remove_idxs.append(i)
 
         # Remove indices that are zero, starting at the end.
-        for idx in decreasing_remove_idxs:
-            self._values.pop(idx)
-            self._strengths.pop(idx)
+        if self.remove_zeros:
+            for idx in decreasing_remove_idxs:
+                self._values.pop(idx)
+                self._strengths.pop(idx)
 
     def push(self, value, strength):
         """
