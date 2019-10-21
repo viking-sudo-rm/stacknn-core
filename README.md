@@ -21,9 +21,9 @@ Depends on numpy and torch.
 
 ## Contributing
 
-This project is managed by [Computational Linguistics at Yale](http://clay.yale.edu/). We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker.
+We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker.
 
-If you are a Yale student interested in joining our lab for this or another project, please contact Bob Frank.
+If you are a Yale student interested in joining [Computational Linguistics at Yale](http://clay.yale.edu/) for this or another project, please contact Bob Frank.
 
 ## Citations
 
