@@ -17,7 +17,7 @@ All the code in this repository is associated with the paper [Context-Free Trans
 pip install git+https://github.com/viking-sudo-rm/stacknn-core
 ```
 
-Depends on numpy and torch.
+The library only supports Python 3 and depends on numpy and torch.
 
 ## Contributing
 
