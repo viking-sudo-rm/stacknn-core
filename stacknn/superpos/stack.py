@@ -1,4 +1,5 @@
 import torch
+from typing import Optional
 
 
 class Stack:
@@ -13,7 +14,7 @@ class Stack:
         self.device = tapes.device
 
     @classmethod
-    def empty(cls, batch_size: int, stack_dim: int, device: int):
+    def empty(cls, batch_size: int, stack_dim: int, device: Optional[int] = None):
         tapes = torch.zeros(batch_size, 0, stack_dim, device=device)
         return cls(tapes)
 

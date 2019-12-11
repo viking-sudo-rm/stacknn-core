@@ -1,15 +1,30 @@
 # `stacknn-core`: The Successor to StackNN
-This library implements differentiable stacks and queues in PyTorch. It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and optimized for faster training. The API is also straightforward. For example, to construct a differentiable stack and perform a push, all you have to do is:
+This library implements various types of differentiable stacks and queues in PyTorch. In stacknn/structs, we include a *weighed* stack implementation, and in stacknn/structs, we implement a *superposition-based*differentiable stack architecture.
+
+## Weighted Differentiable Stack
+
+It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and optimized for faster training. The API is also straightforward. For example, to construct a differentiable stack and perform a push, all you have to do is:
 
 ```python
 from stacknn.structs import Stack
-stack = Stack(BATCH_SIZE, STACK_VECTOR_SIZE)
+stack = Stack(BATCH_SIZE, STACK_DIM)
 read_vectors = stack(value_vectors, pop_strengths, push_strengths)
 ```
 
 For more complex use cases, refer to the (old) [StackNN](https://github.com/viking-sudo-rm/StackNN) or [industrial-stacknns](https://github.com/viking-sudo-rm/industrial-stacknns) repositories.
 
 All the code in this repository is associated with the paper [Context-Free Transductions with Neural Stacks](https://arxiv.org/abs/1809.02836), which appeared at the Analyzing and Interpreting Neural Networks for NLP workshop at EMNLP 2018. Refer to our paper for more theoretical background on differentiable data structures.
+
+## Superposition-Based Differentiable Stack
+
+The architecture in this subpackage is based on the one used by [Suzgun et al., 2019](https://arxiv.org/abs/1911.03329v1). Example usage:
+
+```python
+from stacknn.superpos import Stack
+stack = Stack.empty(BATCH_SIZE, STACK_DIM)
+stack.update(policy_vectors, push_vectors)
+stack.tapes  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
+```
 
 ## Installation
 
