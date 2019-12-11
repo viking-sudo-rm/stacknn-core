@@ -73,5 +73,5 @@ Thanks to the various members of [Computational Linguistics at Yale](http://clay
 
 To run the unit tests for this library, execute the follow command from the root stacknn-core directory:
 ```shell
-python -m unittest
+pytest stacknn/
 ```
