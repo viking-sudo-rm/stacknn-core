@@ -17,7 +17,7 @@ All the code in this repository is associated with the paper [Context-Free Trans
 
 ## Superposition-Based Differentiable Stack
 
-The architecture in this subpackage is based on the one used by [Suzgun et al., 2019](https://arxiv.org/abs/1911.03329v1). Example usage:
+The architecture in this subpackage is based on the one used by [Suzgun et al. (2019)](https://arxiv.org/abs/1911.03329v1). Example usage:
 
 ```python
 from stacknn.superpos import Stack
@@ -42,7 +42,7 @@ If you are a Yale student interested in joining [Computational Linguistics at Ya
 
 ## Citations
 
-If you use this codebase in your research, please cite the associated paper:
+If you use the weighted stack in your research, please cite the following paper. If you use the superposition-based stack, please cite [Suzgun et al. (2019)](https://arxiv.org/abs/1911.03329v1).
 
 ```
 @inproceedings{hao-etal-2018-context,
