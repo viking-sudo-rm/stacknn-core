@@ -13,7 +13,7 @@ read_vectors = stack(value_vectors, pop_strengths, push_strengths)
 
 For more complex use cases, refer to the (old) [StackNN](https://github.com/viking-sudo-rm/StackNN) or [industrial-stacknns](https://github.com/viking-sudo-rm/industrial-stacknns) repositories.
 
-All the code in this repository is associated with the paper [Context-Free Transductions with Neural Stacks](https://arxiv.org/abs/1809.02836), which appeared at the Analyzing and Interpreting Neural Networks for NLP workshop at EMNLP 2018. Refer to our paper for more theoretical background on differentiable data structures.
+The weighted stack is associated with the paper [Context-Free Transductions with Neural Stacks](https://arxiv.org/abs/1809.02836), which appeared at the Analyzing and Interpreting Neural Networks for NLP workshop at EMNLP 2018. Refer to our paper for more theoretical background on differentiable data structures.
 
 ## Superposition-Based Differentiable Stack
 
