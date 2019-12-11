@@ -1,5 +1,5 @@
 # `stacknn-core`: The Successor to StackNN
-This library implements various types of differentiable stacks and queues in PyTorch. In stacknn/structs, we include a *weighed* stack implementation, and in stacknn/structs, we implement a *superposition-based*differentiable stack architecture.
+This library implements various types of differentiable stacks and queues in PyTorch. In stacknn/structs, we include our original *weighed* stack implementation, and in stacknn/structs, we implement the *superposition-based* differentiable stack used by [Suzgun et al. (2019)](https://arxiv.org/abs/1911.03329v1).
 
 ## Weighted Differentiable Stack
 
