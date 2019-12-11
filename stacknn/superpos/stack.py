@@ -45,5 +45,6 @@ class Stack:
             pop_tapes[:, :-2, :] = self.tapes[:, 1:]
             pop_tapes[:, -2:, :] = 0.
 
+        policies = policies.unsqueeze(-1).unsqueeze(-1)
         self.tapes = policies[:, 0] * push_tapes + policies[:, 1] * noop_tapes + \
             policies[:, 2] * pop_tapes

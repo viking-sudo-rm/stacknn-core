@@ -47,6 +47,17 @@ class TestSuperStack(unittest.TestCase):
         stack.update(policy, NEW_VEC)
         torch.testing.assert_allclose(stack.tapes.tolist(), [[[1/3, 1/3, 0]]])
 
+    def test_complex_update(self):
+        batch_size = 16
+        stack_dim = 10
+        policy_vectors = torch.ones(batch_size, 3)
+        push_vectors = torch.ones(batch_size, stack_dim)
+
+        stack = Stack.empty(batch_size, stack_dim)
+        stack.update(policy_vectors, push_vectors)
+
+        expected = push_vectors.unsqueeze(dim=1)
+        torch.testing.assert_allclose(stack.tapes, expected)
 
 if __name__ == "__main__":
     unittest.main()
