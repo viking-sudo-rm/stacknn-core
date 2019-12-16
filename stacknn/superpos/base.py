@@ -21,7 +21,8 @@ class AbstractStack(metaclass=ABCMeta):
               ):
         return NotImplemented
 
+    @classmethod
     @abstractmethod
-    def get_num_actions(self):
+    def get_num_actions(cls):
         # Use a method instead of a property for consistency with AllenNLP API.
         return NotImplemented

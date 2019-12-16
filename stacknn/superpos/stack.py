@@ -40,6 +40,7 @@ class Stack(AbstractStack):
         policies = policies.unsqueeze(-1).unsqueeze(-1)
         self.tapes = policies[:, 0] * push_tapes + policies[:, 1] * pop_tapes
 
+    @classmethod
     @overrides
-    def get_num_actions(self):
+    def get_num_actions(cls):
         return 2

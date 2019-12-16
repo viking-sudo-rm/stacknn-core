@@ -46,6 +46,7 @@ class NoOpStack(AbstractStack):
         self.tapes = policies[:, 0] * push_tapes + policies[:, 1] * noop_tapes + \
             policies[:, 2] * pop_tapes
 
+    @classmethod
     @overrides
-    def get_num_actions(self):
+    def get_num_actions(cls):
         return 3
