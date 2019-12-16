@@ -59,5 +59,9 @@ class TestSuperNoOpStack(unittest.TestCase):
         expected = push_vectors.unsqueeze(dim=1)
         torch.testing.assert_allclose(stack.tapes, expected)
 
+    def test_get_num_actions(self):
+        stack = NoOpStack.empty(1, 3, None)
+        assert stack.get_num_actions() == 3
+
 if __name__ == "__main__":
     unittest.main()

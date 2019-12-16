@@ -1,8 +1,11 @@
+from overrides import overrides
 import torch
 from typing import Optional
 
+from stacknn.superpos.base import AbstractStack
 
-class NoOpStack:
+
+class NoOpStack(AbstractStack):
 
     """Implements a superposition-y differentiable stack architecture inspired by Suzgun et al.,
     2019. The paper link is:
@@ -11,15 +14,7 @@ class NoOpStack:
     This stack is extended to allow no operation.
     """
 
-    def __init__(self, tapes: torch.Tensor):
-        self.tapes = tapes
-        self.device = tapes.device
-
-    @classmethod
-    def empty(cls, batch_size: int, stack_dim: int, device: Optional[int] = None):
-        tapes = torch.zeros(batch_size, 0, stack_dim, device=device)
-        return cls(tapes)
-
+    @overrides
     def update(self,
                policies: torch.Tensor,  # Distribution of shape [batch_size, 3].
                new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
@@ -50,3 +45,7 @@ class NoOpStack:
         policies = policies.unsqueeze(-1).unsqueeze(-1)
         self.tapes = policies[:, 0] * push_tapes + policies[:, 1] * noop_tapes + \
             policies[:, 2] * pop_tapes
+
+    @overrides
+    def get_num_actions(self):
+        return 3
