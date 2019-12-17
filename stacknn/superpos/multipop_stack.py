@@ -27,8 +27,14 @@ class MultiPopStack(AbstractStack):
         for action in range(self.NUM_ACTIONS):
             tapes = torch.empty(batch_size, length + 1, stack_dim, device=self.device)
             tapes[:, 0, :] = new_vecs
-            tapes[:, 1:length + 1 - action, :] = self.tapes
-            tapes[:, length + 1 - action:, :] = 0.
+
+            if action <= length:
+                # Remove action-many elements from the stack.
+                tapes[:, 1:1 + length - action, :] = self.tapes[:, :length - action, :]
+                tapes[:, 1 + length - action:, :] = 0.
+            else:
+                # Remove everything from the stack.
+                tapes[:, 1:, :] = 0.
 
             weighted_tape = policies[:, action] * tapes
             weighted_tapes.append(weighted_tape)

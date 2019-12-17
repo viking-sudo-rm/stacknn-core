@@ -2,7 +2,7 @@ from distutils.core import setup
 
 
 setup(name="stacknn",
-      version="0.6.6",
+      version="0.6.7",
       description="Differentiable stacks and queues in PyTorch",
       author="Will Merrill, Computational Linguistics at Yale",
       url="https://github.com/viking-sudo-rm/StackNN",

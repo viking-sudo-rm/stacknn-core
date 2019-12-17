@@ -10,7 +10,7 @@ from stacknn.superpos import MultiPopStack
 NUM_ACTIONS = 6
 REDUCE0 = torch.tensor([[1., 0., 0., 0., 0., 0.]])
 REDUCE1 = torch.tensor([[0., 1., 0., 0., 0., 0.]])
-REDUCE2 = torch.tensor([[0., 0., 1., 0., 0., 0.]])
+REDUCE5 = torch.tensor([[0., 0., 0., 0., 0., 1.]])
 
 
 NEW_LIST = [[[1., 1., 0.]]]
@@ -33,6 +33,12 @@ class TestMultipopStack(unittest.TestCase):
         # Apply a pop.
         stack.update(REDUCE1, torch.tensor([[1., 0., 1.]]))
         assert stack.tapes.tolist() == [[[1., 0., 1.], [0.0, 0.0, 0.0]]]
+
+    def test_push_reduce5(self):
+        stack = MultiPopStack.empty(1, 3)
+        stack.update(REDUCE0, NEW_VEC)
+        stack.update(REDUCE5, torch.tensor([[1., 0., 1.]]))
+        assert stack.tapes.tolist() == [[[1.0, 0.0, 1.0], [0.0, 0.0, 0.0]]]
 
     def test_superpos(self):
         stack = MultiPopStack.empty(1, 3, None)
