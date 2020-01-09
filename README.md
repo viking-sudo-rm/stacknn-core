@@ -26,6 +26,8 @@ stack.update(policy_vectors, value_vectors)
 stack.tapes  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
 ```
 
+The superposition-based stack framework allows for many different variants. We implement many of these in `stacknn.superpos`.
+
 ## Installation
 
 ```shell
