@@ -23,10 +23,10 @@ class MultiPopStack(AbstractStack):
                new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
               ) -> None:
         batch_size, length, stack_dim = self.tapes.size()
-
         policies = policies.unsqueeze(-1).unsqueeze(-1)
         tapes = torch.empty(batch_size, self.num_actions, length + 1, stack_dim,
                             device=self.device)
+
         for action in range(self.num_actions):
             tapes[:, action, 0, :] = new_vecs
 
