@@ -42,5 +42,5 @@ class MultiPopStack(AbstractStack):
         self.tapes = torch.sum(tapes, dim=1)
 
     @overrides
-    def get_num_actions(self):
+    def get_num_actions(self) -> int:
         return self.num_actions
