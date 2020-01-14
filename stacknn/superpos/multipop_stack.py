@@ -13,18 +13,20 @@ class MultiPopStack(AbstractStack):
     The stack utilizes reduce-k operations which combine k pops with one push.
     """
 
-    NUM_ACTIONS = 6
+    def __init__(self, stack_dim: int, num_actions: int = 6):
+        super().__init__(stack_dim)
+        self.num_actions = num_actions
 
     @overrides
     def update(self,
-               policies: torch.Tensor,  # Distribution of shape [batch_size, NUM_ACTIONS].
+               policies: torch.Tensor,  # Distribution of shape [batch_size, num_actions].
                new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
               ):
         batch_size, length, stack_dim = self.tapes.size()
 
         policies = policies.unsqueeze(-1).unsqueeze(-1)
         weighted_tapes = []
-        for action in range(self.NUM_ACTIONS):
+        for action in range(self.num_actions):
             tapes = torch.empty(batch_size, length + 1, stack_dim, device=self.device)
             tapes[:, 0, :] = new_vecs
 
@@ -41,7 +43,6 @@ class MultiPopStack(AbstractStack):
 
         self.tapes = sum(weighted_tapes)
 
-    @classmethod
     @overrides
-    def get_num_actions(cls):
-        return cls.NUM_ACTIONS
+    def get_num_actions(self):
+        return self.num_actions

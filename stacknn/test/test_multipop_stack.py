@@ -7,7 +7,6 @@ from numpy.testing import assert_approx_equal
 from stacknn.superpos import MultiPopStack
 
 
-NUM_ACTIONS = 6
 REDUCE0 = torch.tensor([[1., 0., 0., 0., 0., 0.]])
 REDUCE1 = torch.tensor([[0., 1., 0., 0., 0., 0.]])
 REDUCE5 = torch.tensor([[0., 0., 0., 0., 0., 1.]])
@@ -49,7 +48,8 @@ class TestMultipopStack(unittest.TestCase):
         torch.testing.assert_allclose(stack.tapes.tolist(), expected)
 
     def test_get_num_actions(self):
-        assert MultiPopStack.get_num_actions() == NUM_ACTIONS
+        stack = MultiPopStack(5, 10)
+        assert stack.get_num_actions() == 10
 
 if __name__ == "__main__":
     unittest.main()

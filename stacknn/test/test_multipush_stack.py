@@ -7,7 +7,6 @@ from numpy.testing import assert_approx_equal
 from stacknn.superpos import MultiPushStack
 
 
-NUM_ACTIONS = 6
 PUSH0 = torch.tensor([[1., 0., 0., 0., 0., 0.]])
 PUSH2 = torch.tensor([[0., 0., 1., 0., 0., 0.]])
 PUSH3 = torch.tensor([[0., 0., 0., 1., 0., 0.]])
@@ -81,7 +80,8 @@ class TestMultiPushStack(unittest.TestCase):
         torch.testing.assert_allclose(stack.tapes.tolist(), expected)
 
     def test_get_num_actions(self):
-        assert MultiPushStack.get_num_actions() == NUM_ACTIONS
+        stack = MultiPushStack(5, 10)
+        assert stack.get_num_actions() == 10
 
 if __name__ == "__main__":
     unittest.main()
