@@ -15,7 +15,8 @@ class AbstractStack(metaclass=ABCMeta):
         stack.reset(batch_size, device)
         return stack
 
-    def reset(self, batch_size: int, device: Optional[int] = None):
+    def reset(self, batch_size: int, device: Optional[int] = None) -> None:
+        del self.tapes
         self.tapes = torch.zeros(batch_size, 0, self.stack_dim, device=device)
         self.device = device
 
@@ -23,7 +24,7 @@ class AbstractStack(metaclass=ABCMeta):
     def update(self,
                policies: torch.Tensor,  # Distribution of shape [batch_size, num_actions].
                new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
-              ):
+              ) -> None:
         return NotImplemented
 
     @abstractmethod
