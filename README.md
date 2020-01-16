@@ -38,9 +38,7 @@ The library only supports Python 3 and depends on numpy and torch.
 
 ## Contributing
 
-We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker.
-
-If you are a Yale student interested in joining [Computational Linguistics at Yale](http://clay.yale.edu/) for this or another project, please contact Bob Frank.
+We welcome contributions from outside in the form of pull requests. Please report any bugs in the GitHub issues tracker. If you are a Yale student interested in joining [Computational Linguistics at Yale](http://clay.yale.edu/) for this or another project, please contact Bob Frank.
 
 ## Citations
 
