@@ -1,9 +1,9 @@
 # `stacknn-core`: The Successor to StackNN
 This library implements various types of differentiable stacks and queues in PyTorch. In stacknn/structs, we include our original *weighted* stack implementation, and in stacknn/superpos, we implement several kinds of *superimposed* differentiable stacks used by [Suzgun et al. (2019)](https://arxiv.org/abs/1911.03329v1) and others.
 
-## Weighted Differentiable Stack
+## Weighted Stack
 
-It is a light-weight version of [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and optimized for faster training. The API is also straightforward. For example, to construct a differentiable stack and perform a push, all you have to do is:
+The weighted stack in this library is a light-weight version of the one in [StackNN](https://github.com/viking-sudo-rm/StackNN) that is easier to install and optimized for faster training. The API is also straightforward. For example, to construct a differentiable stack and perform a push, all you have to do is:
 
 ```python
 from stacknn.structs import Stack
@@ -15,7 +15,7 @@ For more complex use cases, refer to the (old) [StackNN](https://github.com/viki
 
 The weighted stack is associated with the paper [Context-Free Transductions with Neural Stacks](https://arxiv.org/abs/1809.02836), which appeared at the Analyzing and Interpreting Neural Networks for NLP workshop at EMNLP 2018. Refer to our paper for more theoretical background on differentiable data structures.
 
-## Superimposed Differentiable Stack
+## Superimposed Stack
 
 The architecture in this subpackage is based on the one used by [Suzgun et al. (2019)](https://arxiv.org/abs/1911.03329v1). Example usage:
 
