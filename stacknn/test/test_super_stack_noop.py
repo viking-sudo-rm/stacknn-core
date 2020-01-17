@@ -62,5 +62,10 @@ class TestSuperNoOpStack(unittest.TestCase):
     def test_get_num_actions(self):
         assert NoOpStack.get_num_actions() == 3
 
+    def test_returns(self):
+        stack = NoOpStack.empty(1, 3, None)
+        tapes = stack.update(PUSH, NEW_VEC)
+        assert tapes is stack.tapes
+
 if __name__ == "__main__":
     unittest.main()

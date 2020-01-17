@@ -46,5 +46,10 @@ class TestSuperStack(unittest.TestCase):
     def test_get_num_actions(self):
         assert MinimalistStack.get_num_actions() == 2
 
+    def test_returns(self):
+        stack = MinimalistStack.empty(1, 3, None)
+        tapes = stack.update(PUSH, VEC1)
+        assert tapes is stack.tapes
+
 if __name__ == "__main__":
     unittest.main()

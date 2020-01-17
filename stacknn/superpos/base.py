@@ -11,8 +11,12 @@ class AbstractStack(metaclass=ABCMeta):
         self.tapes: torch.FloatTensor = None
 
     @classmethod
-    def empty(cls, batch_size: int, stack_dim: int, device: Optional[int] = None):
-        stack = cls(stack_dim)
+    def empty(cls,
+              batch_size: int,
+              stack_dim: int,
+              max_depth: Optional[int] = None,
+              device: Optional[int] = None):
+        stack = cls(stack_dim, max_depth=max_depth)
         stack.reset(batch_size, device)
         return stack
 

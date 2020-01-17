@@ -58,5 +58,5 @@ class TransitionParserStack(AbstractStack):
 
     @classmethod
     @overrides
-    def get_num_actions(cls):
+    def get_num_actions(cls) -> int:
         return 3

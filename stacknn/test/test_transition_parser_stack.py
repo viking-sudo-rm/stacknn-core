@@ -63,5 +63,10 @@ class TestTransitionParserStack(unittest.TestCase):
     def test_get_num_actions(self):
         assert TransitionParserStack.get_num_actions() == 3
 
+    def test_returns(self):
+        stack = TransitionParserStack.empty(1, 4, None)
+        tapes = stack.update(SHIFT, VEC1)
+        assert tapes is stack.tapes
+
 if __name__ == "__main__":
     unittest.main()
