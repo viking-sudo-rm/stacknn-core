@@ -24,31 +24,27 @@ class MultiPushStack(AbstractStack):
     def update(self,
                policies: torch.Tensor,  # Distribution of shape [batch_size, num_actions].
                new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
-              ):
+              ) -> None:
         batch_size, length, stack_dim = self.tapes.size()
-
         new_vecs = new_vecs.unsqueeze(1)
         policies = policies.unsqueeze(-1).unsqueeze(-1)
-        weighted_tapes = []
+        tapes = torch.empty(batch_size, self.num_actions, length + self.num_actions, stack_dim,
+                            device=self.device)
+
         for action in range(self.num_actions):
-            tapes = torch.empty(batch_size, length + self.num_actions, stack_dim,
-                                device=self.device)
             stacked_new_vecs = new_vecs.repeat(1, action, 1)
-            tapes[:, :action, :] = stacked_new_vecs
+            tapes[:, action, :action, :] = stacked_new_vecs
 
             if length > 0:
                 cutoff = action + length - 1
-                tapes[:, action:cutoff, :] = self.tapes[:, 1:, :]
-                tapes[:, cutoff:, :] = 0.
+                tapes[:, action, action:cutoff, :] = self.tapes[:, 1:, :]
+                tapes[:, action, cutoff:, :] = 0.
             else:
-                tapes[:, action:] = 0.
+                tapes[:, action, action:, :] = 0.
 
-            # TODO: Can refactor this part as a matrix multiplication.
-            weighted_tape = policies[:, action] * tapes
-            weighted_tapes.append(weighted_tape)
-
-        self.tapes = sum(weighted_tapes)
+        tapes = policies * tapes
+        self.tapes = torch.sum(tapes, dim=1)
 
     @overrides
-    def get_num_actions(self):
+    def get_num_actions(self) -> int:
         return self.num_actions
