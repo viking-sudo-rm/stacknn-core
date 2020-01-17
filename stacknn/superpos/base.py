@@ -33,6 +33,6 @@ class AbstractStack(metaclass=ABCMeta):
         return NotImplemented
 
     @abstractmethod
-    def get_num_actions(self):
+    def get_num_actions(self) -> int:
         """This can be either a class or instance method depending on the stack type."""
         return NotImplemented

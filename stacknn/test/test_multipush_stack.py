@@ -80,7 +80,7 @@ class TestMultiPushStack(unittest.TestCase):
         torch.testing.assert_allclose(stack.tapes.tolist(), expected)
 
     def test_get_num_actions(self):
-        stack = MultiPushStack(5, 10)
+        stack = MultiPushStack(5, num_actions=10)
         assert stack.get_num_actions() == 10
 
 if __name__ == "__main__":

@@ -48,7 +48,7 @@ class TestMultipopStack(unittest.TestCase):
         torch.testing.assert_allclose(stack.tapes.tolist(), expected)
 
     def test_get_num_actions(self):
-        stack = MultiPopStack(5, 10)
+        stack = MultiPopStack(5, num_actions=10)
         assert stack.get_num_actions() == 10
 
 if __name__ == "__main__":

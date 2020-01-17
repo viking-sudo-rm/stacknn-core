@@ -16,9 +16,9 @@ class NoOpStack(AbstractStack):
 
     @overrides
     def update(self,
-               policies: torch.Tensor,  # Distribution of shape [batch_size, 3].
-               new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
-              ):
+               policies: torch.FloatTensor,  # Distribution of shape [batch_size, 3].
+               new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
+              ) -> torch.FloatTensor:
         batch_size, length, stack_dim = self.tapes.size()
 
         if length == 0:
@@ -45,6 +45,9 @@ class NoOpStack(AbstractStack):
         policies = policies.unsqueeze(-1).unsqueeze(-1)
         self.tapes = policies[:, 0] * push_tapes + policies[:, 1] * noop_tapes + \
             policies[:, 2] * pop_tapes
+
+        self._enforce_max_depth()
+        return self.tapes
 
     @classmethod
     @overrides

@@ -15,9 +15,9 @@ class TransitionParserStack(AbstractStack):
 
     @overrides
     def update(self,
-               policies: torch.Tensor,  # Distribution of shape [batch_size, 3].
-               new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
-              ):
+               policies: torch.FloatTensor,  # Distribution of shape [batch_size, 3].
+               new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
+              ) -> torch.FloatTensor:
         batch_size, length, stack_dim = self.tapes.size()
 
         if length == 0:
@@ -52,6 +52,9 @@ class TransitionParserStack(AbstractStack):
 
         pol = policies.unsqueeze(-1).unsqueeze(-1)
         self.tapes = pol[:, 0] * left_tapes + pol[:, 1] * right_tapes + pol[:, 2] * shift_tapes
+
+        self._enforce_max_depth()
+        return self.tapes
 
     @classmethod
     @overrides
