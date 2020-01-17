@@ -5,8 +5,9 @@ from typing import Optional
 
 class AbstractStack(metaclass=ABCMeta):
 
-    def __init__(self, stack_dim: int):
+    def __init__(self, stack_dim: int, max_depth: Optional[int] = None):
         self.stack_dim = stack_dim
+        self.max_depth = max_depth
         self.tapes: torch.FloatTensor = None
 
     @classmethod
@@ -20,11 +21,15 @@ class AbstractStack(metaclass=ABCMeta):
         self.tapes = torch.zeros(batch_size, 0, self.stack_dim, device=device)
         self.device = device
 
+    def _enforce_max_depth(self) -> None:
+        if self.max_depth is not None:
+            self.tapes = self.tapes[:, :self.max_depth, :]
+
     @abstractmethod
     def update(self,
-               policies: torch.Tensor,  # Distribution of shape [batch_size, num_actions].
-               new_vecs: torch.Tensor   # Vectors of shape [batch_size, stack_dim].
-              ) -> None:
+               policies: torch.FloatTensor,  # Distribution of shape [batch_size, num_actions].
+               new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
+              ) -> torch.FloatTensor:
         return NotImplemented
 
     @abstractmethod
