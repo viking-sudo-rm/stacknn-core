@@ -15,19 +15,15 @@ class AbstractStack(metaclass=ABCMeta):
               batch_size: int,
               stack_dim: int,
               max_depth: Optional[int] = None,
-              device: Optional[int] = None):
-        stack = cls(stack_dim, max_depth=max_depth)
-        stack.reset(batch_size, device)
+              device: Optional[int] = None,
+              **kwargs):
+        stack = cls(stack_dim, max_depth=max_depth, **kwargs)
+        stack.reset(batch_size, device=device)
         return stack
 
     def reset(self, batch_size: int, device: Optional[int] = None) -> None:
         del self.tapes
         self.tapes = torch.zeros(batch_size, 0, self.stack_dim, device=device)
-        self.device = device
-
-    def _enforce_max_depth(self) -> None:
-        if self.max_depth is not None:
-            self.tapes = self.tapes[:, :self.max_depth, :]
 
     @abstractmethod
     def update(self,

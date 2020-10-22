@@ -3,6 +3,7 @@ import torch
 from typing import Optional
 
 from stacknn.superpos.base import AbstractStack
+import stacknn.superpos.functional as F
 
 
 class TransitionParserStack(AbstractStack):
@@ -18,42 +19,7 @@ class TransitionParserStack(AbstractStack):
                policies: torch.FloatTensor,  # Distribution of shape [batch_size, 3].
                new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
               ) -> torch.FloatTensor:
-        batch_size, length, stack_dim = self.tapes.size()
-
-        if length == 0:
-            left_tapes = torch.zeros(batch_size, 1, stack_dim, device=self.device)
-            right_tapes = left_tapes
-            shift_tapes = new_vecs.unsqueeze(dim=1)
-
-        else:
-            # Left-Arc operation.
-            left_tapes = torch.empty(batch_size, length + 1, stack_dim, device=self.device)
-            if length < 2:
-                left_tapes[:, :-1, :] = self.tapes
-                left_tapes[:, -1, :] = 0.
-            else:
-                left_tapes[:, 0, :] = self.tapes[:, 0]
-                left_tapes[:, 1:-2, :] = self.tapes[:, 2:]
-                left_tapes[:, -2:, :] = 0.
-
-            # Right-Arc operation.
-            right_tapes = torch.empty(batch_size, length + 1, stack_dim, device=self.device)
-            if length < 2:
-                right_tapes[:, :-1, :] = self.tapes
-                right_tapes[:, -1, :] = 0.
-            else:
-                right_tapes[:, :-2, :] = self.tapes[:, 1:]
-                right_tapes[:, -2:, :] = 0.
-
-            # Shift operation.
-            shift_tapes = torch.empty(batch_size, length + 1, stack_dim, device=self.device)
-            shift_tapes[:, 0, :] = new_vecs
-            shift_tapes[:, 1:, :] = self.tapes
-
-        pol = policies.unsqueeze(-1).unsqueeze(-1)
-        self.tapes = pol[:, 0] * left_tapes + pol[:, 1] * right_tapes + pol[:, 2] * shift_tapes
-
-        self._enforce_max_depth()
+        self.tapes = F.update_transition_parser_stack(self.tapes, policies, new_vecs, self.max_depth)
         return self.tapes
 
     @classmethod

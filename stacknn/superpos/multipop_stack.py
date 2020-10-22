@@ -3,6 +3,7 @@ import torch
 from typing import Optional
 
 from stacknn.superpos.base import AbstractStack
+import stacknn.superpos.functional as F
 
 
 class MultiPopStack(AbstractStack):
@@ -25,26 +26,7 @@ class MultiPopStack(AbstractStack):
                policies: torch.FloatTensor,  # Distribution of shape [batch_size, num_actions].
                new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
               ) -> torch.FloatTensor:
-        batch_size, length, stack_dim = self.tapes.size()
-        policies = policies.unsqueeze(-1).unsqueeze(-1)
-        tapes = torch.empty(batch_size, self.num_actions, length + 1, stack_dim,
-                            device=self.device)
-
-        for action in range(self.num_actions):
-            tapes[:, action, 0, :] = new_vecs
-
-            if action <= length:
-                # Remove action-many elements from the stack.
-                tapes[:, action, 1:1 + length - action, :] = self.tapes[:, :length - action, :]
-                tapes[:, action, 1 + length - action:, :] = 0.
-            else:
-                # Remove everything from the stack.
-                tapes[:, action, 1:, :] = 0.
-
-        tapes = policies * tapes
-        self.tapes = torch.sum(tapes, dim=1)
-
-        self._enforce_max_depth()
+        self.tapes = F.update_kpop_stack(self.tapes, policies, new_vecs, self.num_actions, self.max_depth)
         return self.tapes
 
     @overrides

@@ -3,6 +3,7 @@ import torch
 from typing import Optional
 
 from stacknn.superpos.base import AbstractStack
+import stacknn.superpos.functional as F
 
 
 class MultiPushStack(AbstractStack):
@@ -28,27 +29,7 @@ class MultiPushStack(AbstractStack):
                policies: torch.FloatTensor,  # Distribution of shape [batch_size, num_actions].
                new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
               ) -> torch.FloatTensor:
-        batch_size, length, stack_dim = self.tapes.size()
-        new_vecs = new_vecs.unsqueeze(1)
-        policies = policies.unsqueeze(-1).unsqueeze(-1)
-        tapes = torch.empty(batch_size, self.num_actions, length + self.num_actions, stack_dim,
-                            device=self.device)
-
-        for action in range(self.num_actions):
-            stacked_new_vecs = new_vecs.repeat(1, action, 1)
-            tapes[:, action, :action, :] = stacked_new_vecs
-
-            if length > 0:
-                cutoff = action + length - 1
-                tapes[:, action, action:cutoff, :] = self.tapes[:, 1:, :]
-                tapes[:, action, cutoff:, :] = 0.
-            else:
-                tapes[:, action, action:, :] = 0.
-
-        tapes = policies * tapes
-        self.tapes = torch.sum(tapes, dim=1)
-
-        self._enforce_max_depth()
+        self.tapes = F.update_kpush_stack(self.tapes, policies, new_vecs, self.num_actions, self.max_depth)
         return self.tapes
 
     @overrides
