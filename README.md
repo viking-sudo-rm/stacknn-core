@@ -22,10 +22,17 @@ The architecture in this subpackage is based on the one used by [Suzgun et al. (
 ```python
 from stacknn.superpos import Stack
 stack = Stack.empty(BATCH_SIZE, STACK_DIM)
-stack_tape = stack.update(policy_vectors, value_vectors)  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
+stack.update(policy_vectors, value_vectors)
+stack.tapes  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
 ```
 
-The superposition-based stack framework allows for many different variants. We implement many of these in `stacknn.superpos`.
+The superposition-based stack framework allows for many different variants. We implement many of these in `stacknn.superpos`. Since v0.9.3, superposition stacks also support an immutable paradigm recalling functional programming. For example:
+
+```python
+import stacknn.superpos.functional as F
+tapes = torch.zeros(BATCH_SIZE, 0, STACK_DIM)
+new_tapes = F.update_stack(tapes, policy_vectors, value_vectors)
+```
 
 ## Installation
 
