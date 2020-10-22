@@ -19,7 +19,7 @@ def update_kpush_stack(tapes: torch.FloatTensor,
 
         for action in range(num_actions):
             stacked_new_vecs = new_vecs.repeat(1, action, 1)
-            tapes[:, action, :action, :] = stacked_new_vecs
+            new_tapes[:, action, :action, :] = stacked_new_vecs
 
             if length > 0:
                 cutoff = action + length - 1

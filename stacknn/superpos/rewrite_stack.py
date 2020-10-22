@@ -2,8 +2,8 @@ from overrides import overrides
 import torch
 from typing import Optional
 
-from stacknn.superpos.base import AbstractStack
-import stacknn.superpos.functional as F
+from .base import AbstractStack
+from . import functional as F
 
 
 class RewriteStack(AbstractStack):
@@ -17,7 +17,8 @@ class RewriteStack(AbstractStack):
                policies: torch.FloatTensor,  # Distribution of shape [batch_size, 3].
                new_vecs: torch.FloatTensor   # Vectors of shape [batch_size, stack_dim].
               ) -> torch.FloatTensor:
-        return F.update_rewrite_stack(self.tapes, policies, new_vecs, self.max_depth)
+        self.tapes = F.update_rewrite_stack(self.tapes, policies, new_vecs, self.max_depth)
+        return self.tapes
 
     @classmethod
     @overrides

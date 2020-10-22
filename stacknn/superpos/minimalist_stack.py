@@ -2,8 +2,8 @@ from overrides import overrides
 import torch
 from typing import Optional
 
-from stacknn.superpos.base import AbstractStack
-import stacknn.superpos.functional as F
+from .base import AbstractStack
+from . import functional as F
 
 
 class MinimalistStack(AbstractStack):
