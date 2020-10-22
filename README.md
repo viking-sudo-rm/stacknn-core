@@ -22,8 +22,7 @@ The architecture in this subpackage is based on the one used by [Suzgun et al. (
 ```python
 from stacknn.superpos import Stack
 stack = Stack.empty(BATCH_SIZE, STACK_DIM)
-stack.update(policy_vectors, value_vectors)
-stack.tapes  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
+stack_tape = stack.update(policy_vectors, value_vectors)  # Returns a [batch_size, depth, STACK_DIM] tensor of the stack contents.
 ```
 
 The superposition-based stack framework allows for many different variants. We implement many of these in `stacknn.superpos`.
